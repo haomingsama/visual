@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Add an icon to the map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+	<script src="d3.js"></script>
+    <script src='mapboxgl.js'></script>
+    <link href='mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:81%; }
+		#description{
+			position:absolute; 
+			right:0px;
+			height:1000px;
+			width:250px;
+			padding: 0;
+			
+		}
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+<div id="description">
+	<p>To make the app work, please install this google extenstion: </p>
+	<a href="https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi">Allow-Control-Allow-Origin: *</a>
+	<p>This extenstion is required for the app to get the real time data successfully</p>
+	<p>make sure "Enable cross-orgin resource sharing" is enabled in the extension and refresh the page</p>
+	<img src="setting.png" width='200px'>
+	<p>Other time, please disable the extension or it will make you have some problem in browsing other websites.</p>
+	</br>
+	<p>This is the bus line(grey) of M31 in Manhattan. The blue point represent the bus stops.</p>
+	<p>The yellow bus icon will show up and update every five seconds</p>
+	<p>You can see the locations of buses change.</p>
+	
+	
+</div>
+
+<script>
+var description 
+
+mapboxgl.accessToken = 'pk.eyJ1IjoieWFuZzQ5MDUyMCIsImEiOiJjanlxNmNhM2MwMTBhM2NsZTRyamQ5dHlqIn0.rpRj7lBf6j-pmy3yqK7sbA';
+
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/yang490520/cjyqdw7y90e9u1cjtxaue8syl',
+	center: [-73.967, 40.77], // starting position [lng, lat]
+	zoom: 14 // starting zoom
+});
+
+var bus;
+var data_bus = {
+            "id": "points",
+            "type": "symbol",
+            "source": {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": []
+                }
+            },
+            "layout": {
+                "icon-image": "cat",
+                "icon-size": 0.03
+            }
+        }
+function findlat(d){
+	return d.MonitoredVehicleJourney.VehicleLocation.Latitude
+}
+function findlon(d){
+	return d.MonitoredVehicleJourney.VehicleLocation.Longitude
+}
+
+function animateMarker() {
+// Update the data to a new position based on the animation timestamp. The
+// divisor in the expression `timestamp / 1000` controls the animation speed.
+map.getSource('points').setData(data_bus.source.data);
+ 
+// Request the next frame of the animation.
+requestAnimationFrame(animateMarker);
+}
+map.on('load', function() {
+	
+	
+	
+	
+	//add bus stop location
+	map.addSource("national-park", {
+	"type": "geojson",
+	"data": {
+	"type": "FeatureCollection",
+	"features": [ {
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.982719, 40.766592]
+	}
+	}, {
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.980322, 40.765563]
+	}
+	}, 
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.977639, 40.764577]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.974302, 40.763031]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.972425, 40.762383]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.968725, 40.760727]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.966804, 40.75991]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.96486, 40.759086]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.962478, 40.758095]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.961488, 40.757658]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.959957, 40.75826]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.958987, 40.759558]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.95757, 40.761483]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.95624, 40.763333]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.9551713, 40.765019]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.95344, 40.767166]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.952959, 40.768033]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.951606, 40.769679]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.950753, 40.771081]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.949262, 40.773109]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.947842, 40.774863]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.947318, 40.775777]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.94591, 40.777473]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.944942, 40.779214]
+	}
+	},
+	{
+	"type": "Feature",
+	"geometry": {
+	"type": "Point",
+	"coordinates": [-73.946624,40.779901]
+	}
+	},
+	]
+	}
+	});
+	
+	
+	//add line
+	map.addLayer({
+			"id": "route",
+			"type": "line",
+			"source": {
+			"type": "geojson",
+			"data": {
+			"type": "Feature",
+			"properties": {},
+			"geometry": {
+			"type": "LineString",
+			"coordinates": [
+			[-73.982719, 40.766592],
+			[-73.980322, 40.765563],
+			[-73.977639, 40.764577],
+			[-73.974302, 40.763031],
+			[-73.972425, 40.762383],
+			[-73.968725, 40.760727],
+			[-73.966804, 40.75991],
+			[-73.96486, 40.759086],
+			[-73.962478, 40.758095],
+			[-73.961488, 40.757658],
+			[-73.959957, 40.75826],
+			[-73.958987, 40.759558],
+			[-73.95757, 40.761483],
+			[-73.95624, 40.763333],
+			[-73.955171, 40.765019],
+			[-73.95344, 40.767166],
+			[-73.952959, 40.768033],
+			[-73.951606, 40.769679],
+			[-73.950753, 40.771081],
+			[-73.949262, 40.773109],
+			[-73.947842, 40.774863],
+			[-73.947318, 40.775777],
+			[-73.94591, 40.777473],
+			[-73.944942, 40.779214],
+			[-73.946624, 40.779901]
+			]
+			}
+			}
+			},
+			"layout": {
+			"line-join": "round",
+			"line-cap": "round"
+			},
+			"paint": {
+			"line-color": "#888",
+			"line-width": 5
+			}
+			});
+	
+	
+	
+	//add bus icon
+    map.loadImage('bus.png', function(error, image) {
+        if (error) throw error;
+        map.addImage('cat', image);
+        map.addLayer(data_bus)
+		map.addLayer({
+		"id": "park-volcanoes",
+		"type": "circle",
+		"source": "national-park",
+		"paint": {
+		"circle-radius": 3,
+		"circle-color": "aqua"
+		},
+		"filter": ["==", "$type", "Point"],
+		});
+		});
+    });
+
+
+	
+	setInterval(function() {
+	  // map.removeLayer('points');
+	  // map.removeSource('points')
+	  data_bus.source.data.features=[];
+      d3.json('http://bustime.mta.info/api/siri/vehicle-monitoring.json?key=d60b3f05-4a87-4f51-8f3e-0418de7700ba&version=2').then(function(d){
+      	bus = d;
+      	console.log(bus)
+      	vehicle_array = bus.Siri.ServiceDelivery.VehicleMonitoringDelivery[0].VehicleActivity
+      	var M31 = vehicle_array.filter(function(d){
+      		return d.MonitoredVehicleJourney.LineRef =='MTA NYCT_M31'	
+      	})
+      	M31.forEach(function(d){
+			let lat = findlat(d)
+			let lon = findlon(d)
+			data_bus.source.data.features.push({"type": "Feature","geometry":{"type": "Point","coordinates": [lon, lat]}})
+		})
+		
+		animateMarker()
+      })	
+}, 5000);
+
+	
+
+
+
+
+ 
+
+ 
+
+
+</script>
+
+</body>
+</html>
